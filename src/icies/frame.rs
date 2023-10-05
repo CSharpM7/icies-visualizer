@@ -1,4 +1,5 @@
 use crate::imports::imports_agent::*;
+pub static mut popo_sphere_id: [u64; 8] = [0; 8];
 
 unsafe fn nana_indicator(fighter: &mut L2CFighterCommon, boma: *mut BattleObjectModuleAccessor, fighter_kind: i32) {
     let entry = get_entry(fighter) as usize;
@@ -27,6 +28,16 @@ unsafe fn nana_indicator(fighter: &mut L2CFighterCommon, boma: *mut BattleObject
                 }
                 else {
                     ColorBlendModule::cancel_main_color(nana, 0);
+                }
+
+                if !EffectModule::is_exist_effect(boma, popo_sphere_id[entry] as u32) {
+                    let size_mult = 19.0 / 200.0; //thanks jugeeya
+                    EFFECT_FOLLOW(fighter,Hash40::new("sys_shield_damage3"),Hash40::new("top"),
+                    0,1.0,nana_opt_offset,
+                    0,0,0,
+                    nana_opt_dst_near*size_mult,false);
+
+                    popo_sphere_id[entry] = EffectModule::get_last_handle(boma);
                 }
             }
         }
